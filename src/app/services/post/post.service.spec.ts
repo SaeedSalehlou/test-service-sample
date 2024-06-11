@@ -10,22 +10,22 @@ const testMockPosts: PostModel[] = [
   { id: 2, userId: 2, title: 'title 2', body: 'body 2' },
 ]
 
-xdescribe('PostService', () => {
+describe('PostService', () => {
   let service: PostService;
   let httpClient: HttpClient;
-  let httpTestingControl: HttpTestingController;
+  let httptesttoControl: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [HttpClient, HttpTestingController, PostService]
+      providers: [PostService]
     });
     service = TestBed.inject(PostService);
   });
 
   beforeEach(() => {
     service = TestBed.inject(PostService)
-    // httpTestingControl=TestBed.inject(PostService);
+    httptesttoControl = TestBed.inject(HttpTestingController);
   })
   it('should be created', () => {
     expect(service).toBeTruthy();
@@ -34,15 +34,15 @@ xdescribe('PostService', () => {
   it('should be get post list -httpclient get method-', () => {
     service.get().subscribe(
       (posts) => {
-        expect(testMockPosts).toBe(posts, 'should check mock data');
+        expect(testMockPosts).toBe(posts);
       }
     );
 
-    const req = httpTestingControl.expectOne(service.API_URL);
+    const req = httptesttoControl.expectOne(service.API_URL);
     expect(req.cancelled).toBeFalsy();
     expect(req.request.responseType).toEqual('json');
 
     req.flush(testMockPosts);
-    httpTestingControl.verify();
+    httptesttoControl.verify();
   })
 });
